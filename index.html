@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Data to Google Sheets</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            color: rgb(0, 4, 11);
+            font-weight: bolder;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .button {
+            background: rgb(62, 77, 241);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">लाभार्थी</h2>
+        <form id="addForm">
+            <div class="form-group">
+                <label for="work">नाव</label>
+                <input type="text" class="form-control" id="work" name="work" required>
+            </div>
+            <div class="form-group">
+                <label for="Scheme">योजना:</label>
+                <input type="text" class="form-control" id="Scheme" name="Scheme" required>
+            </div>
+            <div class="form-group">
+                <label for="amt">निधी:</label>
+                <input type="text" class="form-control" id="amt" name="amt" required>
+            </div>
+            <div class="form-group">   
+                <label for="date">दिनांक</label>
+                <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block button">Save</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwDGhyUfQu4PHFqZm_NGplmDYh8vGSbfel6HUNF_1kAfxCjp6lEZa6Dn_sTAdHnVh1FBw/exec';
+        $(document).ready(function() {
+            $('#addForm').submit(function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    body: new URLSearchParams(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'Success') {
+                        alert('Data saved successfully.');
+                        window.location.href = 'display.html'; // Redirect to desired page
+                    } else {
+                        alert('Error saving data: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Error saving data: ' + error.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
